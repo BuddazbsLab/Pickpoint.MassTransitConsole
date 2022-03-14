@@ -1,0 +1,2 @@
+# Pickpoint.MassTransitConsole
+MassTransitConsole.Example
