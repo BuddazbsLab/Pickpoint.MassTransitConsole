@@ -1,21 +1,27 @@
 ﻿using MassTransit;
 using Message;
+using Newtonsoft.Json;
+using NLog;
+using RabbitMqConfig;
 
 namespace Pickpoint.MassTransitConsole.Consumer
 {
     internal class Consumer
     {
+        private static Logger logger = LogManager.GetCurrentClassLogger();
         public static async Task EventListener()
         {
+            var items = JsonConvert.DeserializeObject<UsingRabbitMqConfig>(await File.ReadAllTextAsync("appsettings.json"));
+
             var busControl = Bus.Factory.CreateUsingRabbitMq(cfg =>
             {
-                cfg.Host("localhost", h =>
+                cfg.Host($"amqp://{items.host}", h =>
                 {
-                    h.Password("guest");
-                    h.Username("guest");
+                    h.Password(items.password);
+                    h.Username(items.userName);
                 });
 
-                cfg.Message<IValueEntered>(x => { x.SetEntityName("Consumer"); });
+            cfg.Message<IValueEntered>(x => { x.SetEntityName("Consumer"); });
 
                 cfg.ReceiveEndpoint("event-listener", e =>
                 {
@@ -29,8 +35,8 @@ namespace Pickpoint.MassTransitConsole.Consumer
             await busControl.StartAsync(source.Token);
             try
             {
-                Console.WriteLine("[*] Зпущено приложение для получения сообщений, или нажмите [enter] для выхода.");
-                Console.WriteLine("[*] Ожидаю сообщения.");
+                logger.Info("Зпущено приложение для получения сообщений, или нажмите [enter] для выхода.");
+                logger.Info("Ожидаю сообщения.");
 
                 await Task.Run(() => Console.ReadLine());
             }
@@ -45,8 +51,8 @@ namespace Pickpoint.MassTransitConsole.Consumer
         {
             public async Task Consume(ConsumeContext<IValueEntered> context)
             {
-                
-                    Console.WriteLine("Получено сообщение: {0}", context.Message.Text);
+
+                logger.Info("Получено сообщение: {0}.", context.Message.Text);
                 
             }
 

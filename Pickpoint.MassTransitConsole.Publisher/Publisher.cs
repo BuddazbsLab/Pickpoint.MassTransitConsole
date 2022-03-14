@@ -1,21 +1,22 @@
 ﻿using MassTransit;
 using MassTransit.Testing;
 using Message;
-using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using System.Diagnostics;
 using RabbitMqConfig;
+using NLog;
 
 namespace Pickpoint.MassTransitConsole.Publisher
 {
     internal class Publisher
     {
+        private static Logger logger = LogManager.GetCurrentClassLogger();
+
         public static  async Task ConnectionAndSendMessage()
         {
             var items = JsonConvert.DeserializeObject<UsingRabbitMqConfig>(await File.ReadAllTextAsync("appsettings.json"));
 
-            var busControl = Bus.Factory.CreateUsingRabbitMq(async cfg =>
+            var busControl = Bus.Factory.CreateUsingRabbitMq(cfg =>
             {               
                         cfg.Host($"amqp://{items.host}", h =>
                         {
@@ -26,17 +27,18 @@ namespace Pickpoint.MassTransitConsole.Publisher
             var source = new CancellationTokenSource(TimeSpan.FromSeconds(10));
 
             await busControl.StartAsync(source.Token);
-            var monitor = busControl.CreateBusActivityMonitor();
 
             try
             {
-                Console.WriteLine("Запущено приложние для отправки сообщений (Publisher)");
+                logger.Info("Запущено приложние для отправки сообщений (Publisher)");
 
                 // отправить сообщение потребителю (consumers)
                 
                 var endpoint = await busControl.GetSendEndpoint(new Uri("exchange:Consumer"));
 
+                // Задаем сколько сообщений нужно отправить
                 var messageStart = items.numberMessage;
+
                 var timer = new Stopwatch();
                 timer.Start();
 
@@ -47,10 +49,11 @@ namespace Pickpoint.MassTransitConsole.Publisher
                     {
                         Text = "123",
                     });
-                }             
-                Console.WriteLine($"Отпралено {messageStart} сообщений за {timer.ElapsedMilliseconds:N0} ms");
+                }
+                logger.Info($"Отпралено {messageStart} сообщений за {timer.ElapsedMilliseconds:N0} ms");
+                logger.Info($"Размер сообщений составляет: {messageStart*875} bytes");
                 timer.Stop();
-                await monitor.AwaitBusInactivity();
+
                 // точка остановки. не блокирует основной поток программы
                 await Task.Run(Console.ReadLine);
             }
