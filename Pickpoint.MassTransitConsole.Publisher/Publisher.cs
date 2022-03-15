@@ -41,9 +41,8 @@ namespace Pickpoint.MassTransitConsole.Publisher
 
                 var timer = new Stopwatch();
                 timer.Start();
-
                 // 1 сообщение 875 bytes (Статистика из кролика)
-                for(int i = 0; i < messageStart; i++)
+                for (int i = 0; i < messageStart; i++)
                 {
                     await endpoint.Send<IValueEntered>(new
                     {
@@ -51,11 +50,12 @@ namespace Pickpoint.MassTransitConsole.Publisher
                     });
                 }
                 logger.Info($"Отпралено {messageStart} сообщений за {timer.ElapsedMilliseconds:N0} ms");
-                logger.Info($"Размер сообщений составляет: {messageStart*875} bytes");
+                logger.Info($"Размер сообщений составляет: {messageStart*875} bytes");                
                 timer.Stop();
 
                 // точка остановки. не блокирует основной поток программы
                 await Task.Run(Console.ReadLine);
+                
             }
             finally
             {
