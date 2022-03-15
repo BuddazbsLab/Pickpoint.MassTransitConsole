@@ -18,23 +18,22 @@ namespace Pickpoint.MassTransitConsole.Publisher
 
             var busControl = Bus.Factory.CreateUsingRabbitMq(cfg =>
             {               
-                        cfg.Host($"amqp://{items.host}", h =>
+                        cfg.Host($"amqp://{items.host}:{items.port}", h =>
                         {
                             h.Password(items.password);
                             h.Username(items.userName);  
                         });
             });
-            var source = new CancellationTokenSource(TimeSpan.FromSeconds(10));
 
-            await busControl.StartAsync(source.Token);
+            await busControl.StartAsync();
 
             try
             {
                 logger.Info("Запущено приложние для отправки сообщений (Publisher)");
 
                 // отправить сообщение потребителю (consumers)
-                
-                var endpoint = await busControl.GetSendEndpoint(new Uri("exchange:Consumer"));
+                 var endpoint = await busControl.GetSendEndpoint(new Uri("exchanges:Consumer"));
+                    
 
                 // Задаем сколько сообщений нужно отправить
                 var messageStart = items.numberMessage;
@@ -44,22 +43,18 @@ namespace Pickpoint.MassTransitConsole.Publisher
                 // 1 сообщение 875 bytes (Статистика из кролика)
                 for (int i = 0; i < messageStart; i++)
                 {
-                    await endpoint.Send<IValueEntered>(new
-                    {
-                        Text = "123",
-                    });
+                    await endpoint.Send<SendMessage>(new { Text = "123" });
+
+                    //Примерно 2 мс нужно для отправки сообщения. 
+                    await Task.Delay(messageStart/2);
                 }
                 logger.Info($"Отпралено {messageStart} сообщений за {timer.ElapsedMilliseconds:N0} ms");
                 logger.Info($"Размер сообщений составляет: {messageStart*875} bytes");                
-                timer.Stop();
-
-                // точка остановки. не блокирует основной поток программы
-                await Task.Run(Console.ReadLine);
-                
+                timer.Stop();                
             }
             finally
             {
-                await busControl.StopAsync(CancellationToken.None);
+                await busControl.StopAsync();
             }
 
         }

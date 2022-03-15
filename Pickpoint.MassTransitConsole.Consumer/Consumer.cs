@@ -17,22 +17,38 @@ namespace Pickpoint.MassTransitConsole.Consumer
 
             var busControl = Bus.Factory.CreateUsingRabbitMq(cfg =>
             {
-                cfg.Host($"amqp://{items.host}", h =>
+                cfg.Message<SendMessage>(x => { x.SetEntityName("Consumer"); });
+
+                // Очередь по умоляанию.
+                cfg.Host($"amqp://{items.host}:{items.port}", h =>
                 {
                     h.Password(items.password);
                     h.Username(items.userName);
                 });
-
-                cfg.Message<IValueEntered>(x => { x.SetEntityName("Consumer"); });
-
-                cfg.ReceiveEndpoint("event-listener", e =>
+                cfg.ReceiveEndpoint($"{items.queueName}", e =>
                 {
                     e.Consumer<EventConsumer>();
-
                 });
+
+                /*Цикл для создания очередей и приема из них сообщений.
+                 *Инициализирована переменная для укзания кол-ва очередей
+                 */
+                var listener = items.numberListener;
+
+                for (var i = 0; i < listener; i++)
+                {
+                    cfg.Host($"amqp://{items.host}:{items.port}", h =>
+                {
+                    h.Password(items.password);
+                    h.Username(items.userName);
+                });
+                    cfg.ReceiveEndpoint($"{items.queueName}{i}", e =>
+                    {
+                        e.Consumer<EventConsumer>();
+                    });
+                }
             });
 
-            var source = new CancellationTokenSource(TimeSpan.FromSeconds(15));
             var timer = new Stopwatch();
             timer.Start();
             try
@@ -41,22 +57,24 @@ namespace Pickpoint.MassTransitConsole.Consumer
                 logger.Info("Зпущено приложение для получения сообщений, или нажмите [enter] для выхода.");
                 logger.Info("Ожидаю сообщения."); 
                 
-                await busControl.StartAsync(source.Token);
-
-                await Task.Run(() => Console.ReadLine());
+                await busControl.StartAsync();
 
                 timer.Stop();
             }
+            catch (Exception)
+            {
+                throw new ArgumentException("Сообщения не были получены. \nПроверь: \n1. Подключение. \n2. Привязку к очереди. \n3. Стороноу, кто шлет сообщения.");
+            }
             finally
             {
-                await busControl.StopAsync(source.Token);                
+                await busControl.StopAsync();                
             }
         }
 
         class EventConsumer :
-            IConsumer<IValueEntered>
+            IConsumer<SendMessage>
         {
-            public Task Consume(ConsumeContext<IValueEntered> context)
+            public Task Consume(ConsumeContext<SendMessage> context)
             {
                 logger.Info("Получено сообщение: {0}.", context.Message.Text);
                 return Task.CompletedTask;
