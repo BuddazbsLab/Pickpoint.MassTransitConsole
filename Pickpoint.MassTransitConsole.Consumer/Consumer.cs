@@ -61,24 +61,11 @@ namespace Pickpoint.MassTransitConsole.Consumer
             {
                 throw new ArgumentException("Сообщения не были получены. \nПроверь: \n1. Подключение. \n2. Привязку к очереди. \n3. Стороноу, кто шлет сообщения.");
             }
-
-
-
-
-
             //finally
             //{
             //    await busControl.StopAsync(); //Проблема               
             //}
-        }
-        // Solid
-        // Отдельно в папку
-        // Инкремент переменной
-        // Get поствить
-        // interlockincrement
-        // Messagecount++
-        // Статическая переменная почитать
-        
+        }        
     }
 }
 
