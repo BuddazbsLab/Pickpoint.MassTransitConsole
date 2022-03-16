@@ -22,7 +22,7 @@ namespace Pickpoint.MassTransitConsole.Publisher
             var busControl = Bus.Factory.CreateUsingRabbitMq(cfg =>
             {
 
-                cfg.Message<SendMessage>(x => { x.SetEntityName("Publisher"); });
+                cfg.Message<ISendMessage>(x => { x.SetEntityName("Publisher"); });
 
                 cfg.Host($"amqp://{host}:{port}", h =>
                         {
@@ -49,7 +49,7 @@ namespace Pickpoint.MassTransitConsole.Publisher
                 // 1 сообщение 875 bytes (Статистика из кролика)
                 for (int i = 0; i < messageStart; i++)
                 {
-                    await endpoint.Send<SendMessage>(new
+                    await endpoint.Send<ISendMessage>(new
                     {
                         Text = "123"
                     });

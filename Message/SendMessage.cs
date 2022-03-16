@@ -1,6 +1,6 @@
 ﻿namespace Message
 {
-    public class SendMessage
+    public interface ISendMessage
     {
        public string Text { get; }
     }

@@ -8,8 +8,7 @@ namespace Pickpoint.MassTransitConsole.Consumer
 {
     internal class Consumer
     {
-
-    private static Logger logger = LogManager.GetCurrentClassLogger();
+        private static Logger logger = LogManager.GetCurrentClassLogger();
         public static async Task MasstransitConfigure(
                                                         Uri host,
                                                         string password,
@@ -22,7 +21,7 @@ namespace Pickpoint.MassTransitConsole.Consumer
         {
             var busControl = Bus.Factory.CreateUsingRabbitMq(cfg =>
             {
-                cfg.Message<SendMessage>(x => { x.SetEntityName("Consumer"); });
+                cfg.Message<ISendMessage>(x => { x.SetEntityName("Consumer"); });
 
                 /*Цикл для создания очередей и приема из них сообщений.
                  *Инициализирована переменная для укзания кол-ва очередей
