@@ -17,6 +17,6 @@ namespace Pickpoint.MassTransitConsole.Consumer
                 items.userName,
                 items.numberListener);
         }
-        
+
     }
 }
