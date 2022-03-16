@@ -1,5 +1,4 @@
 ﻿using MassTransit;
-using MassTransit.Testing;
 using Message;
 using Newtonsoft.Json;
 using System.Diagnostics;
@@ -11,17 +10,24 @@ namespace Pickpoint.MassTransitConsole.Publisher
     internal class Publisher
     {
         private static Logger logger = LogManager.GetCurrentClassLogger();
-
-        public static  async Task ConnectionAndSendMessage()
+        
+        public static  async Task ConnectionAndSendMessage(
+                                                        Uri host,
+                                                        string password,
+                                                        string port,
+                                                        string userName,
+                                                        int numberMessage)
         {
-            var items = JsonConvert.DeserializeObject<UsingRabbitMqConfig>(await File.ReadAllTextAsync("appsettings.json"));
 
             var busControl = Bus.Factory.CreateUsingRabbitMq(cfg =>
-            {               
-                        cfg.Host($"amqp://{items.host}:{items.port}", h =>
+            {
+
+                cfg.Message<SendMessage>(x => { x.SetEntityName("Publisher"); });
+
+                cfg.Host($"amqp://{host}:{port}", h =>
                         {
-                            h.Password(items.password);
-                            h.Username(items.userName);  
+                            h.Password(password);
+                            h.Username(userName);  
                         });
             });
 
@@ -32,18 +38,21 @@ namespace Pickpoint.MassTransitConsole.Publisher
                 logger.Info("Запущено приложние для отправки сообщений (Publisher)");
 
                 // отправить сообщение потребителю (consumers)
-                 var endpoint = await busControl.GetSendEndpoint(new Uri("exchanges:Consumer"));
+                 var endpoint = await busControl.GetSendEndpoint(new Uri("exchange:Consumer"));
                     
 
                 // Задаем сколько сообщений нужно отправить
-                var messageStart = items.numberMessage;
+                var messageStart = numberMessage;
 
                 var timer = new Stopwatch();
                 timer.Start();
                 // 1 сообщение 875 bytes (Статистика из кролика)
                 for (int i = 0; i < messageStart; i++)
                 {
-                    await endpoint.Send<SendMessage>(new { Text = "123" });
+                    await endpoint.Send<SendMessage>(new
+                    {
+                        Text = "123"
+                    });
 
                     //Примерно 2 мс нужно для отправки сообщения. 
                     await Task.Delay(messageStart/2);

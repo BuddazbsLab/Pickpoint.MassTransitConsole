@@ -1,5 +1,5 @@
 ﻿using Pickpoint.MassTransitConsole.Publisher;
 
 
-
-await Publisher.ConnectionAndSendMessage();
+Settings settings = new Settings();
+await settings.GetSettingsApp();

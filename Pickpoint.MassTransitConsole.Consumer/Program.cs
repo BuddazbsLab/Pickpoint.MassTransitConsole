@@ -2,6 +2,8 @@
 
 using Pickpoint.MassTransitConsole.Consumer;
 
-await Consumer.EventListener();
+
+Settings settings = new Settings();
+await settings.GetSettingsApp();
 
 Console.ReadLine();
