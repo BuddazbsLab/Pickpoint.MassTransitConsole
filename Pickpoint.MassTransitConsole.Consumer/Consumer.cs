@@ -40,13 +40,12 @@ namespace Pickpoint.MassTransitConsole.Consumer
                     {
                         e.Consumer<EventConsumer>(c =>
                         {
-                            c.UseConcurrentMessageLimit(1);
-                            });
-                        
+                            c.UseConcurrentMessageLimit(1);                            
+                        });                       
                     });
-                }
-               
+                }              
             });
+
             var source = new CancellationTokenSource(TimeSpan.FromSeconds(100000));
             
             try
@@ -60,10 +59,6 @@ namespace Pickpoint.MassTransitConsole.Consumer
             {
                 throw new ArgumentException("Сообщения не были получены. \nПроверь: \n1. Подключение. \n2. Привязку к очереди. \n3. Стороноу, кто шлет сообщения.");
             }
-            //finally
-            //{
-            //    await busControl.StopAsync(); //Проблема               
-            //}
         }        
     }
 }

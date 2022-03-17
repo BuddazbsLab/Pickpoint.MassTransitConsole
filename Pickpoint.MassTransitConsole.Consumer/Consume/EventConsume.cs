@@ -8,26 +8,28 @@ namespace Pickpoint.MassTransitConsole.Consumer.Consume
     class EventConsumer : IConsumer<ISendMessage>
     {
         private object lockObj = new();
-        private static int messageCount = 0;
+        public static int messageCount { get; private set; }
+
 
         private static Logger logger = LogManager.GetCurrentClassLogger();
 
         public Task Consume(ConsumeContext<ISendMessage> context)
         {
 
-            logger.Info("Получено сообщение: {0}.", context.Message.Text);          
-            
+            logger.Info("Получено сообщение: {0}.", context.Message.Text);
+
             lock (lockObj)
             {
-                Interlocked.Increment(ref messageCount);                
+                messageCount++;
             }
-            if(messageCount == 100)
+
+            var numberMessage = MessageCount.messageNumber;
+
+            if (messageCount == numberMessage)
             {
-                logger.Info($"Всего получено сообщений {messageCount} из возможных {100}.");
+                logger.Info($"Всего получено сообщений {messageCount} из возможных {numberMessage}.");
             }
             return Task.CompletedTask;
-
         }
     }
 }
-

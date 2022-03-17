@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using Pickpoint.MassTransitConsole.Consumer.Consume;
 using RabbitMqConfig;
 
 namespace Pickpoint.MassTransitConsole.Consumer
@@ -15,7 +16,10 @@ namespace Pickpoint.MassTransitConsole.Consumer
                 items.port,
                 items.queueName,
                 items.userName,
-                items.numberListener);
+                items.numberListener
+                );
+
+            MessageCount.ConsumeCount(items.numberMessage);
         }
 
     }
