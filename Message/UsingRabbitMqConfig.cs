@@ -1,6 +1,6 @@
 ﻿
 
-namespace RabbitMqConfig
+namespace Common
 {
     public class UsingRabbitMqConfig
     {

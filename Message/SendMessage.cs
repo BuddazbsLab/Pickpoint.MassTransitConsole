@@ -1,4 +1,4 @@
-﻿namespace Message
+﻿namespace Common
 {
     public interface ISendMessage
     {

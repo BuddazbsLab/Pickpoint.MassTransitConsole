@@ -1,5 +1,5 @@
-﻿using MassTransit;
-using Message;
+﻿using Common;
+using MassTransit;
 using NLog;
 
 namespace Pickpoint.MassTransitConsole.Consumer.Consume
@@ -7,8 +7,15 @@ namespace Pickpoint.MassTransitConsole.Consumer.Consume
 
     class EventConsumer : IConsumer<ISendMessage>
     {
-        private object lockObj = new();
-        public static int messageCount { get; private set; }
+        public static int MessageCount
+        {
+            get
+            {
+                return messageCount;
+            }
+        }
+
+        private static int messageCount;
 
 
         private static Logger logger = LogManager.GetCurrentClassLogger();
@@ -16,19 +23,7 @@ namespace Pickpoint.MassTransitConsole.Consumer.Consume
         public Task Consume(ConsumeContext<ISendMessage> context)
         {
 
-            logger.Info("Получено сообщение: {0}.", context.Message.Text);
-
-            lock (lockObj)
-            {
-                messageCount++;
-            }
-
-            var numberMessage = MessageCount.messageNumber;
-
-            if (messageCount == numberMessage)
-            {
-                logger.Info($"Всего получено сообщений {messageCount} из возможных {numberMessage}.");
-            }
+            Interlocked.Increment(ref messageCount);
             return Task.CompletedTask;
         }
     }
