@@ -1,22 +1,21 @@
-﻿
-
+﻿using Common;
+using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
-using RabbitMqConfig;
 
 namespace Pickpoint.MassTransitConsole.Publisher
 {
     internal class Settings
     {
-        public async Task GetSettingsApp()
+        public Settings(IConfiguration configProvider)
         {
-            var items = JsonConvert.DeserializeObject<UsingRabbitMqConfig>(await File.ReadAllTextAsync("appsettings.json"));
+            this.ConfigProvider = configProvider;
+        }
 
-            await Publisher.ConnectionAndSendMessage(
-                items.host,
-                items.password,
-                items.port,
-                items.userName,
-                items.numberMessage);
+        public IConfiguration ConfigProvider { get; }
+
+        public async Task<UsingRabbitMqConfig> GetSettingsApp()
+        {
+            return ConfigProvider.GetSection("Rabbit").Get<UsingRabbitMqConfig>();
         }
     }
 }

@@ -1,6 +1,6 @@
-﻿using MassTransit;
+﻿using Common;
+using MassTransit;
 using MassTransit.Testing;
-using Message;
 using NLog;
 using Pickpoint.MassTransitConsole.Consumer.Consume;
 

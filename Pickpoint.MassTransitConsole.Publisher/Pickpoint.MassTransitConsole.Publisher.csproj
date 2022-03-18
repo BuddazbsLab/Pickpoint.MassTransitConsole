@@ -8,19 +8,26 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="C:\Users\Apltre\.nuget\packages\nlog.config\4.7.14\contentFiles\any\any\NLog.config" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="MassTransit" Version="7.3.1" />
     <PackageReference Include="MassTransit.AspNetCore" Version="7.3.1" />
     <PackageReference Include="MassTransit.Extensions.DependencyInjection" Version="7.3.1" />
     <PackageReference Include="MassTransit.RabbitMQ" Version="7.3.1" />
     <PackageReference Include="Microsoft.Extensions.Configuration" Version="6.0.1" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="6.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.CommandLine" Version="6.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="6.0.0" />
     <PackageReference Include="NLog" Version="4.7.14" />
     <PackageReference Include="NLog.Config" Version="4.7.14" />
     <PackageReference Include="NLog.Extensions.Logging" Version="1.7.4" />
+    <PackageReference Include="NLog.Web.AspNetCore" Version="4.14.0" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Message\Message.csproj" />
-    <ProjectReference Include="..\RabbitMqConfig\RabbitMqConfig.csproj" />
+    <ProjectReference Include="..\Message\Common.csproj" />
   </ItemGroup>
 
 </Project>
