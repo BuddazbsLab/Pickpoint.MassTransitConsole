@@ -21,7 +21,7 @@ var messageSender = new MessageSender(logger, bus);
 var sendConfig = new SendParams 
 {
     MessageNumber = configS.numberMessage,
-    SendIntervalSeconds = 0,
+    SendIntervalSeconds = 6,
 };
 await messageSender.Send(sendConfig);
 Console.ReadLine();

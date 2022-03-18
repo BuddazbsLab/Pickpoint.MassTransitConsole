@@ -1,25 +1,20 @@
 ﻿using Common;
-using Newtonsoft.Json;
-using Pickpoint.MassTransitConsole.Consumer.Consume;
+using Microsoft.Extensions.Configuration;
 
 namespace Pickpoint.MassTransitConsole.Consumer
 {
     internal class Settings
     {
-        public async Task GetSettingsApp()
+        public Settings(IConfiguration configureProvider)
         {
-            var items = JsonConvert.DeserializeObject<UsingRabbitMqConfig>(await File.ReadAllTextAsync("appsettings.json"));
+            this.ConfigureProvider = configureProvider;
+        }
 
-            await Consumer.MasstransitConfigure(
-                items.host,
-                items.password,
-                items.port,
-                items.queueName,
-                items.userName,
-                items.numberListener
-                );
+        public IConfiguration ConfigureProvider { get; }
 
-            MessageCount.ConsumeCount(items.numberMessage);
+        public async Task<UsingRabbitMqConfig> GetSettingsApp()
+        {
+            return ConfigureProvider.GetSection("Rabbit").Get<UsingRabbitMqConfig>();
         }
 
     }

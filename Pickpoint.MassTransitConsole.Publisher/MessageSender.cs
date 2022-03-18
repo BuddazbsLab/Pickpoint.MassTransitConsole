@@ -21,7 +21,7 @@ namespace Pickpoint.MassTransitConsole.Publisher
         {
             try
             {
-                this.Logger.Info("Запущено приложние для отправки сообщений (Publisher)");
+                this.Logger.Info("[*]The application for sending messages is running (Publisher)");
 
                 // отправить сообщение потребителю (consumers)
                 var endpoint = await this.MassTransitBusControl.GetSendEndpoint(new Uri("exchange:Consumer"));
@@ -29,7 +29,7 @@ namespace Pickpoint.MassTransitConsole.Publisher
                 var timer = new Stopwatch();
                 timer.Start();
                 var messageNumber = sendConfig.MessageNumber;
-                var intervalMilliseconds = (int)((double)messageNumber / sendConfig.SendIntervalSeconds * 1000); 
+                var intervalMilliseconds = (int)((double)messageNumber / sendConfig.SendIntervalSeconds /** 1000*/); 
                 // 1 сообщение 875 bytes (Статистика из кролика)
                 for (int i = 0; i < messageNumber; i++)
                 {
@@ -42,8 +42,8 @@ namespace Pickpoint.MassTransitConsole.Publisher
                     await Task.Delay(intervalMilliseconds);
                 }
                 timer.Stop();
-                this.Logger.Info($"Отпралено {messageNumber} сообщений за {(double)timer.ElapsedMilliseconds / 1000} секунд. Ожидаемое время ~ {sendConfig.SendIntervalSeconds} секунд.");
-                this.Logger.Info($"Размер сообщений составляет: {messageNumber * 875} bytes");
+                this.Logger.Info($"[*]Отпралено {messageNumber} сообщений за {(double)timer.ElapsedMilliseconds / 1000} секунд. Ожидаемое время ~ {sendConfig.SendIntervalSeconds} секунд.");
+                this.Logger.Info($"[*]Размер сообщений составляет: {messageNumber * 875} bytes");
             }
             finally
             {
