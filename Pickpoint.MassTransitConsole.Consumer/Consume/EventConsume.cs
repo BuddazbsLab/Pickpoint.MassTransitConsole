@@ -1,6 +1,5 @@
 ﻿using Common;
 using MassTransit;
-using NLog;
 
 namespace Pickpoint.MassTransitConsole.Consumer.Consume
 {
