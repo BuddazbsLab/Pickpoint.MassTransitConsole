@@ -17,12 +17,8 @@ namespace Pickpoint.MassTransitConsole.Consumer.Consume
 
         private static int messageCount;
 
-
-        private static Logger logger = LogManager.GetCurrentClassLogger();
-
         public Task Consume(ConsumeContext<ISendMessage> context)
         {
-
             Interlocked.Increment(ref messageCount);
             return Task.CompletedTask;
         }
