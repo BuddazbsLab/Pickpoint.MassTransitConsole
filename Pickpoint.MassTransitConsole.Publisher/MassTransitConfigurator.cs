@@ -15,7 +15,7 @@ namespace Pickpoint.MassTransitConsole.Publisher
 
         public async Task<IBusControl> Configure(UsingRabbitMqConfig config)
         {
-            this.Logger.Info("[*]Trying to start!");
+            this.Logger.Info("[*]Starting MassTransit app.......");
             var busControl = Bus.Factory.CreateUsingRabbitMq(cfg =>
             {
 

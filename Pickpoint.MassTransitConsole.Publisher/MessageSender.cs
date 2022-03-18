@@ -29,7 +29,7 @@ namespace Pickpoint.MassTransitConsole.Publisher
                 var timer = new Stopwatch();
                 timer.Start();
                 var messageNumber = sendConfig.MessageNumber;
-                var intervalMilliseconds = (int)((double)messageNumber / sendConfig.SendIntervalSeconds /** 1000*/); 
+                var intervalMilliseconds = (int)((double)messageNumber / sendConfig.SendIntervalSeconds * 1000); 
                 // 1 сообщение 875 bytes (Статистика из кролика)
                 for (int i = 0; i < messageNumber; i++)
                 {

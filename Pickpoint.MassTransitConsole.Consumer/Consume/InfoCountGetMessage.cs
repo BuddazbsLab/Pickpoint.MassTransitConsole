@@ -15,7 +15,7 @@ namespace Pickpoint.MassTransitConsole.Consumer.Consume
 
         public async Task CountMessage(int countGetMessage)
         {
-            this.Logger.Info($"Messages received {countGetMessage}.");
+            this.Logger.Info($"[*]Messages received {countGetMessage}.");
         }
     }
 }

@@ -17,7 +17,7 @@ namespace Pickpoint.MassTransitConsole.Consumer
         public async Task<IBusControl> MasstransitConfigure(UsingRabbitMqConfig config) 
 
         {
-            this.Logger.Info("Starting MassTransit app.......");
+            this.Logger.Info("[*]Starting MassTransit app.......");
             await Task.Delay(10);
             var busControl = Bus.Factory.CreateUsingRabbitMq(cfg =>
             {
@@ -51,8 +51,9 @@ namespace Pickpoint.MassTransitConsole.Consumer
             try
             {
                 await busControl.StartAsync();
-                this.Logger.Info("MassTransit configured started!");
-                this.Logger.Info("Await Message......");
+                this.Logger.Info("[*]MassTransit configured started!");
+                this.Logger.Info("[*]The application for received messages is running (Consumer)");
+                this.Logger.Info("[*]Await Message......");
                 return busControl;
             }
             catch (Exception)

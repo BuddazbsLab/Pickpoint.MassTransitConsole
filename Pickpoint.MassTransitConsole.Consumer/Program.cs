@@ -21,7 +21,8 @@ var massTransitConfigurator = new MassTransitConfigurator(logger);
 await massTransitConfigurator.MasstransitConfigure(config);
 
 
-await Task.Delay(50000);
+var delayReciveMessage = (config.messageSendTimeIntervalSeconds * 1050);
+await Task.Delay(delayReciveMessage);
 var countGetMessage = EventConsumer.MessageCount;
 InfoCountGetMessage infoCountGetMessage = new(logger, countGetMessage);
 await infoCountGetMessage.CountMessage(countGetMessage);

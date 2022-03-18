@@ -13,15 +13,15 @@ LogManager.Configuration = new NLogLoggingConfiguration(configProvider.GetSectio
 var logger = NLogBuilder.ConfigureNLog(LogManager.Configuration).GetCurrentClassLogger();
 
 Settings settings = new Settings(configProvider);
-var configS = await settings.GetSettingsApp();
+var config = await settings.GetSettingsApp();
 
 var massTransitConfigurator = new MassTransitConfigurator(logger);
-var bus = await massTransitConfigurator.Configure(configS);
+var bus = await massTransitConfigurator.Configure(config);
 var messageSender = new MessageSender(logger, bus);
 var sendConfig = new SendParams 
 {
-    MessageNumber = configS.numberMessage,
-    SendIntervalSeconds = 6,
+    MessageNumber = config.numberMessage,
+    SendIntervalSeconds = config.messageSendTimeIntervalSeconds,
 };
 await messageSender.Send(sendConfig);
 Console.ReadLine();
