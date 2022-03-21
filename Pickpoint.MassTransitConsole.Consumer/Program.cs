@@ -23,7 +23,7 @@ var configSendMessage = await settings.SendParams();
 var massTransitConfigurator = new MassTransitConfigurator(logger);
 await massTransitConfigurator.MasstransitConfigure(configRMQ);
 
-if (configSendMessage.sizeTrafficInMb > 0)
+if (configSendMessage.sendingLogic == 2)
 {
     var delayReciveMessage = (configSendMessage.sizeTrafficInMb * 36000);
     await Task.Delay(delayReciveMessage);
