@@ -71,7 +71,7 @@ namespace Pickpoint.MassTransitConsole.Publisher
                         }
                         await Task.Delay(intervalMilliseconds);
                         timer.Stop();
-                        this.Logger.Info($"[*]Отпралено {sendmessageNumber} сообщений за {(double)timer.ElapsedMilliseconds / 1000} секунд. Ожидаемое время ~ {sendConfig.SendIntervalSeconds} секунд.");
+                        this.Logger.Info($"[*]Отпралено {sendmessageNumber} сообщений за {(double)timer.ElapsedMilliseconds / 1000} секунд.");
                         this.Logger.Info($"[*]Размер сообщений составляет: {sendmessageNumber * 875} bytes");
 
                         break;
