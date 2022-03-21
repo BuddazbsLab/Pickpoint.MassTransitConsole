@@ -1,8 +1,6 @@
-﻿
+﻿using System.Text;
 
-using System.Text;
-
-namespace Pickpoint.MassTransitConsole.Publisher.Traffic
+namespace Pickpoint.MassTransitConsole.Publisher.SizeTextSend
 {
     internal class GenerateString
     {

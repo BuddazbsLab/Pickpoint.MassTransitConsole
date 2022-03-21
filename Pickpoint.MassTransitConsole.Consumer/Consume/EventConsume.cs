@@ -15,7 +15,7 @@ namespace Pickpoint.MassTransitConsole.Consumer.Consume
 
         private static int messageCount;
 
-        public Task Consume(ConsumeContext<SendMessage> context)
+        public  Task Consume(ConsumeContext<SendMessage> context)
         {
             Interlocked.Increment(ref messageCount);
             return Task.CompletedTask;

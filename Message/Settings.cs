@@ -11,9 +11,14 @@ namespace Common
 
         public IConfiguration ConfigureProvider { get; }
 
-        public async Task<UsingRabbitMqConfig> GetSettingsApp()
+        public async Task<UsingRabbitMqConfig> GetSettingsAppRMQ()
         {
             return ConfigureProvider.GetSection("Rabbit").Get<UsingRabbitMqConfig>();
         }
+        public async Task<SendParams> SendParams()
+        {
+            return ConfigureProvider.GetSection("SendMessageParam").Get<SendParams>();
+        }
+
     }
 }

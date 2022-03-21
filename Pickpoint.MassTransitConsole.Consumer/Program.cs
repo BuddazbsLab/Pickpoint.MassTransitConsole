@@ -16,16 +16,29 @@ var logger = NLogBuilder.ConfigureNLog(LogManager.Configuration).GetCurrentClass
 
 
 Settings settings = new Settings(configureProvider);
-var config = await settings.GetSettingsApp();
+var configRMQ = await settings.GetSettingsAppRMQ();
+var configSendMessage = await settings.SendParams();
+
 
 var massTransitConfigurator = new MassTransitConfigurator(logger);
-await massTransitConfigurator.MasstransitConfigure(config);
+await massTransitConfigurator.MasstransitConfigure(configRMQ);
 
+if (configSendMessage.sizeTrafficInMb > 0)
+{
+    var delayReciveMessage = (configSendMessage.sizeTrafficInMb * 36000);
+    await Task.Delay(delayReciveMessage);
+    var countGetMessage = EventConsumer.MessageCount;
+    InfoCountGetMessage infoCountGetMessage = new(logger, countGetMessage);
+    await infoCountGetMessage.CountMessage(countGetMessage);
+}
+else
+{
+    var delayReciveMessage = (configSendMessage.messageSendTimeIntervalSeconds * 1050);
+    await Task.Delay(delayReciveMessage);
+    var countGetMessage = EventConsumer.MessageCount;
+    InfoCountGetMessage infoCountGetMessage = new(logger, countGetMessage);
+    await infoCountGetMessage.CountMessage(countGetMessage);
+}
 
-var delayReciveMessage = (config.messageSendTimeIntervalSeconds * 1050);
-await Task.Delay(delayReciveMessage);
-var countGetMessage = EventConsumer.MessageCount;
-InfoCountGetMessage infoCountGetMessage = new(logger, countGetMessage);
-await infoCountGetMessage.CountMessage(countGetMessage);
 
 Console.ReadLine();
