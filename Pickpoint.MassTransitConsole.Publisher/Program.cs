@@ -4,6 +4,7 @@ using NLog.Extensions.Logging;
 using NLog.Web;
 using Pickpoint.MassTransitConsole.Publisher;
 using Pickpoint.MassTransitConsole.Publisher.Models;
+using Common;
 
 var configProvider = new ConfigurationBuilder()
        .SetBasePath(Directory.GetCurrentDirectory())

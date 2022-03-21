@@ -1,9 +1,8 @@
-﻿using Common;
-using Microsoft.Extensions.Configuration;
+﻿using Microsoft.Extensions.Configuration;
 
-namespace Pickpoint.MassTransitConsole.Consumer
+namespace Common
 {
-    internal class Settings
+    public class Settings
     {
         public Settings(IConfiguration configureProvider)
         {
@@ -16,6 +15,5 @@ namespace Pickpoint.MassTransitConsole.Consumer
         {
             return ConfigureProvider.GetSection("Rabbit").Get<UsingRabbitMqConfig>();
         }
-
     }
 }
