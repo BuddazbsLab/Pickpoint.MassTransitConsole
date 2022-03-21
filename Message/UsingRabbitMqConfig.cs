@@ -1,6 +1,4 @@
-﻿
-
-namespace Common
+﻿namespace Common
 {
     public class UsingRabbitMqConfig
     {
@@ -12,6 +10,8 @@ namespace Common
         public string queueName { get; set; }
         public int numberListener { get; set; }
         public int messageSendTimeIntervalSeconds { get; set; }
+        public long trafficSendinBytes { get; set; }
+        public string alphabet  { get; set; }
     }
 }
 

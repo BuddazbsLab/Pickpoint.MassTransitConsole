@@ -3,8 +3,7 @@ using MassTransit;
 
 namespace Pickpoint.MassTransitConsole.Consumer.Consume
 {
-
-    class EventConsumer : IConsumer<ISendMessage>
+    class EventConsumer : IConsumer<SendMessage>
     {
         public static int MessageCount
         {
@@ -16,7 +15,7 @@ namespace Pickpoint.MassTransitConsole.Consumer.Consume
 
         private static int messageCount;
 
-        public Task Consume(ConsumeContext<ISendMessage> context)
+        public Task Consume(ConsumeContext<SendMessage> context)
         {
             Interlocked.Increment(ref messageCount);
             return Task.CompletedTask;

@@ -19,7 +19,7 @@ namespace Pickpoint.MassTransitConsole.Publisher
             var busControl = Bus.Factory.CreateUsingRabbitMq(cfg =>
             {
 
-                cfg.Message<ISendMessage>(x => { x.SetEntityName("Publisher"); });
+                cfg.Message<SendMessage>(x => { x.SetEntityName("Publisher"); });
 
                 cfg.Host($"amqp://{config.host}:{config.port}", h =>
                         {

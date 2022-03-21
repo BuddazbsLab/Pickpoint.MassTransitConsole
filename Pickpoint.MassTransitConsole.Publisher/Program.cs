@@ -5,6 +5,7 @@ using NLog.Web;
 using Pickpoint.MassTransitConsole.Publisher;
 using Pickpoint.MassTransitConsole.Publisher.Models;
 using Common;
+using Pickpoint.MassTransitConsole.Publisher.Traffic;
 
 var configProvider = new ConfigurationBuilder()
        .SetBasePath(Directory.GetCurrentDirectory())
@@ -16,9 +17,14 @@ var logger = NLogBuilder.ConfigureNLog(LogManager.Configuration).GetCurrentClass
 Settings settings = new Settings(configProvider);
 var config = await settings.GetSettingsApp();
 
+var trafficSize = config.trafficSendinBytes;
+var myAlphabet = config.alphabet; 
+var sendTraffic = GenerateString.generateStringSize(trafficSize, myAlphabet);
+
+
 var massTransitConfigurator = new MassTransitConfigurator(logger);
 var bus = await massTransitConfigurator.Configure(config);
-var messageSender = new MessageSender(logger, bus);
+var messageSender = new MessageSender(logger, bus, sendTraffic);
 var sendConfig = new SendParams 
 {
     MessageNumber = config.numberMessage,

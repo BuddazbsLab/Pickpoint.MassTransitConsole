@@ -21,7 +21,7 @@ namespace Pickpoint.MassTransitConsole.Consumer
             await Task.Delay(10);
             var busControl = Bus.Factory.CreateUsingRabbitMq(cfg =>
             {
-                cfg.Message<ISendMessage>(x => { x.SetEntityName("Consumer"); });
+                cfg.Message<SendMessage>(x => { x.SetEntityName("Consumer"); });
 
                 var listener = config.numberListener;
                 var host = config.host;
