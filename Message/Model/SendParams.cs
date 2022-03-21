@@ -11,5 +11,6 @@
         public int sendingLogic { get; set; }
         public int packageSize { get; set; }
         public int sizeTrafficInMb { get; set; }
+        public int 
     }
 }
