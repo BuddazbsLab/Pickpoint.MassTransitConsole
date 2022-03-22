@@ -1,0 +1,15 @@
+version: '3'
+
+services:
+  rabbit:
+    image: "rabbitmq:3-management"
+    environment:
+      - "RABBITMQ_DEFAULT_PASS=guest"
+      - "RABBITMQ_DEFAULT_USER=guest"
+    ports:
+      - "15672:15672"
+      - "5672:5672"
+      
+# docker-compose up -d --build
+
+
