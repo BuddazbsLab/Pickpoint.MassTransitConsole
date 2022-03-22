@@ -1,34 +1,23 @@
-﻿using MassTransit;
-using Message;
-using NLog;
+﻿using Common;
+using MassTransit;
 
 namespace Pickpoint.MassTransitConsole.Consumer.Consume
 {
-
-    class EventConsumer : IConsumer<ISendMessage>
+    class EventConsumer : IConsumer<SendMessage>
     {
-        private object lockObj = new();
-        public static int messageCount { get; private set; }
-
-
-        private static Logger logger = LogManager.GetCurrentClassLogger();
-
-        public Task Consume(ConsumeContext<ISendMessage> context)
+        public static int MessageCount
         {
-
-            logger.Info("Получено сообщение: {0}.", context.Message.Text);
-
-            lock (lockObj)
+            get
             {
-                messageCount++;
+                return messageCount;
             }
+        }
 
-            var numberMessage = MessageCount.messageNumber;
+        private static int messageCount;
 
-            if (messageCount == numberMessage)
-            {
-                logger.Info($"Всего получено сообщений {messageCount} из возможных {numberMessage}.");
-            }
+        public  Task Consume(ConsumeContext<SendMessage> context)
+        {
+            Interlocked.Increment(ref messageCount);
             return Task.CompletedTask;
         }
     }
