@@ -20,6 +20,7 @@ namespace Pickpoint.MassTransitConsole.Publisher
             {
 
                 cfg.Message<SendMessage>(x => { x.SetEntityName("Publisher"); });
+                cfg.Publish<SendMessage>(p => { p.ExchangeType = "fanout"; });
 
                 cfg.Host($"amqp://{config.host}:{config.port}", h =>
                         {

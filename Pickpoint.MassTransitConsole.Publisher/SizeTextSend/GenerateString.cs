@@ -4,19 +4,14 @@ namespace Pickpoint.MassTransitConsole.Publisher.SizeTextSend
 {
     internal class GenerateString
     {
-        public static String generateStringSize(long trafficSize, string myAlphabet)
+        public static String generateASCIIStringBySize(long trafficSize)
         {
             StringBuilder sb = new StringBuilder();
             Random rd = new Random();
 
-            var alphabet = myAlphabet;
-            int maxIndex = alphabet.Length - 1;
-
             for (int i = 0; i < trafficSize; i++)
             {
-                int index = rd.Next(maxIndex);
-                char c = alphabet[index];
-                sb.Append(c);
+                sb.Append(rd.Next(255));
             }
 
             return sb.ToString().ToLower();

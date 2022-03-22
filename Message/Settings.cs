@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using Common.Model;
+using Microsoft.Extensions.Configuration;
 
 namespace Common
 {
@@ -11,14 +12,23 @@ namespace Common
 
         public IConfiguration ConfigureProvider { get; }
 
-        public async Task<UsingRabbitMqConfig> GetSettingsAppRMQ()
+        public UsingRabbitMqConfig GetSettingsAppRMQ()
         {
             return ConfigureProvider.GetSection("Rabbit").Get<UsingRabbitMqConfig>();
         }
-        public async Task<SendParams> SendParams()
+        public SimpleConfig ConfigurationByAmount()
         {
-            return ConfigureProvider.GetSection("SendMessageParam").Get<SendParams>();
+            return ConfigureProvider.GetSection("ConfigurationByAmount").Get<SimpleConfig>();
         }
 
+        public TrafficParams ConfigurationByTraffic()
+        {
+            return ConfigureProvider.GetSection("ConfigurationByTraffic").Get<TrafficParams>();
+        }
+
+        public ConfigurationTypes ConfigurationType()
+        {
+            return ConfigureProvider.GetSection("ConfigurationType").Get<ConfigurationTypes>();
+        }
     }
 }

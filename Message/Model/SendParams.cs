@@ -1,16 +1,18 @@
 ﻿namespace Common
 {
-    public class SendParams
+    public class SimpleConfig
     {
-        public int MessageNumber { get; init; }
+        public int NumberMessage { get; init; }
         public int SendIntervalSeconds { get; init; }
-        public int numberMessage { get; set; }
-        public int messageSendTimeIntervalSeconds { get; set; }
-        public long trafficSendTextInBytes { get; set; }
-        public string alphabet { get; set; }
-        public int sendingLogic { get; set; }
-        public int packageSize { get; set; }
-        public int sizeTrafficInMb { get; set; }
+        public int NumberListener { get; init; }
+        public int MessageTextSizeBytes { get; init; }
 
+    }
+    public class TrafficParams
+    {
+        public int SendIntervalSeconds { get; init; }
+        public int InputTrafficSizeInMbPerSecond { get; init; }
+        public int OutputTrafficSizeInMbPerSecond { get; init; }
+        public int MessageTextSizeBytes { get; init; }
     }
 }
