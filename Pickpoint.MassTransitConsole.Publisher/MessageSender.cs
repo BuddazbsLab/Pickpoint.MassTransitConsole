@@ -1,5 +1,4 @@
-﻿using Common.Model;
-using MassTransit;
+﻿using MassTransit;
 using NLog;
 using System.Diagnostics;
 
