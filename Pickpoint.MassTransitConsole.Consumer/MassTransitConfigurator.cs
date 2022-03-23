@@ -8,11 +8,13 @@ namespace Pickpoint.MassTransitConsole.Consumer
 {
     internal class MassTransitConfigurator
     {
-        public MassTransitConfigurator(Logger logger)
+        public MassTransitConfigurator(Logger logger, Settings settings)
         {
             this.Logger = logger;
+            this.Settings = settings;
         }
         internal Logger Logger { get; }
+        internal Settings Settings { get; }
 
         public async Task<IBusControl> MasstransitConfigure(UsingRabbitMqConfig config) 
 
@@ -23,7 +25,7 @@ namespace Pickpoint.MassTransitConsole.Consumer
             {
                 cfg.Message<SendMessage>(x => { x.SetEntityName("Consumer"); });
 
-                var listener = config.numberListener;
+                var listener = this.Settings.ConfigurationByAmount().NumberListener;
                 var host = config.host;
                 var port = config.port;
                 var password = config.password;

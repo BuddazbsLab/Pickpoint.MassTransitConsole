@@ -4,7 +4,6 @@ using NLog;
 using NLog.Extensions.Logging;
 using NLog.Web;
 using Pickpoint.MassTransitConsole.Consumer;
-using Pickpoint.MassTransitConsole.Consumer.Consume;
 
 
 var configureProvider = new ConfigurationBuilder()
@@ -16,29 +15,18 @@ var logger = NLogBuilder.ConfigureNLog(LogManager.Configuration).GetCurrentClass
 
 
 Settings settings = new Settings(configureProvider);
-var configRMQ = await settings.GetSettingsAppRMQ();
-var configSendMessage = await settings.SendParams();
+var configRMQ = settings.GetSettingsAppRMQ();
+var configType = settings.ConfigurationType();
 
 
-var massTransitConfigurator = new MassTransitConfigurator(logger);
+
+var massTransitConfigurator = new MassTransitConfigurator(logger, settings);
 await massTransitConfigurator.MasstransitConfigure(configRMQ);
 
-if (configSendMessage.sendingLogic == 2)
-{
-    var delayReciveMessage = (configSendMessage.sizeTrafficInMb * 36000);
-    await Task.Delay(delayReciveMessage);
-    var countGetMessage = EventConsumer.MessageCount;
-    InfoCountGetMessage infoCountGetMessage = new(logger, countGetMessage);
-    await infoCountGetMessage.CountMessage(countGetMessage);
-}
-else
-{
-    var delayReciveMessage = (configSendMessage.messageSendTimeIntervalSeconds * 1050);
-    await Task.Delay(delayReciveMessage);
-    var countGetMessage = EventConsumer.MessageCount;
-    InfoCountGetMessage infoCountGetMessage = new(logger, countGetMessage);
-    await infoCountGetMessage.CountMessage(countGetMessage);
-}
+
+CreateConfigurationListenerProvaider createConfigurationListenerPrivaider = new(settings, logger);
+await createConfigurationListenerPrivaider.ConfigurationListenerProviderAsync(configType);
+
 
 
 Console.ReadLine();
