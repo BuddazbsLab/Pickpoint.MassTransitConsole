@@ -7,8 +7,8 @@ namespace Pickpoint.MassTransitConsole.Consumer
 {
     internal class CreateConfigurationListenerProvaider
     {
-        private readonly int _AdditionalDelayTimeByAmount = 1050;
-        private readonly int _AdditionalDelayTimeTraffic = 36000;
+        private readonly int _additionalDelayTimeByAmount = 1050;
+        private readonly int _additionalDelayTimeTraffic = 36000;
 
         public CreateConfigurationListenerProvaider(Settings settings, Logger logger)
         {
@@ -21,9 +21,9 @@ namespace Pickpoint.MassTransitConsole.Consumer
 
         public async Task ConfigurationListenerProviderAsync(ConfigurationTypes configType)
         {
-            var delayReciveMessageByAmount = (this.Settings.ConfigurationByAmount().SendIntervalSeconds * _AdditionalDelayTimeByAmount);
+            var delayReciveMessageByAmount = (this.Settings.ConfigurationByAmount().SendIntervalSeconds * _additionalDelayTimeByAmount);
             
-            var delayReciveMessageByTraffic = (this.Settings.ConfigurationByTraffic().SendIntervalSeconds * _AdditionalDelayTimeTraffic);
+            var delayReciveMessageByTraffic = (this.Settings.ConfigurationByTraffic().SendIntervalSeconds * _additionalDelayTimeTraffic);
             
 
             switch (configType)
