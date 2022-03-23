@@ -3,8 +3,12 @@ using Pickpoint.MassTransitConsole.Publisher.SizeTextSend;
 
 namespace Pickpoint.MassTransitConsole.Publisher
 {
-    public class ByTrafficConfigurationProvider : ISendConfigurationProvider
+    sealed public class ByTrafficConfigurationProvider : ISendConfigurationProvider
     {
+        private const int _sizeOfMbInBytes = 1048576;
+        private const int _basePackageSize = 871;
+        private readonly int _translationInMilliseconds = 1000;
+
         public ByTrafficConfigurationProvider(Settings configSettings)
         {
             this.ConfigSettings = configSettings;
@@ -15,19 +19,16 @@ namespace Pickpoint.MassTransitConsole.Publisher
             TrafficParams = trafficParams;
         }
 
-        public Settings ConfigSettings { get; }
+        private Settings ConfigSettings { get; }
         public TrafficParams TrafficParams { get; }
-
-        public const int SizeOfMbInBytes = 1048576;
-        public const int BasePackageSize = 871;
 
         public InnerSendConfig GetConfig()
         {
             var config = this.ConfigSettings.ConfigurationByTraffic();
 
             var messageText = GenerateString.generateASCIIStringBySize(config.MessageTextSizeBytes);
-            var sendmessageNumber = (config.InputTrafficSizeInMbPerSecond * SizeOfMbInBytes) / (BasePackageSize) ; // отправляет указанное кол-во Mb сообщениями
-            var intervalMilliseconds = (int)(config.SendIntervalSeconds * 1000 / (sendmessageNumber));
+            var sendmessageNumber = (config.InputTrafficSizeInMbPerSecond * _sizeOfMbInBytes) / (_basePackageSize) ; // отправляет указанное кол-во Mb сообщениями
+            var intervalMilliseconds = (int)(config.SendIntervalSeconds * _translationInMilliseconds / (sendmessageNumber));
 
             return new InnerSendConfig
             {

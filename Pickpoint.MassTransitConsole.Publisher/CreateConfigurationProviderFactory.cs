@@ -3,14 +3,14 @@ using Common.Model;
 
 namespace Pickpoint.MassTransitConsole.Publisher
 {
-    public class CreateConfigurationProviderFactory 
+    sealed public class CreateConfigurationProviderFactory 
     {
         public CreateConfigurationProviderFactory(Settings settings)
         {
             Settings = settings;
         }
 
-        public Settings Settings { get; }
+        private Settings Settings { get; }
 
         public  ISendConfigurationProvider ConfigurationProvider(ConfigurationTypes configType)
         {

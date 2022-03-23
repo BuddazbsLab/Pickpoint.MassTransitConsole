@@ -2,7 +2,7 @@
 
 namespace Pickpoint.MassTransitConsole.Consumer.Consume
 {
-    internal class InfoCountGetMessage
+    sealed internal class InfoCountGetMessage
     {
         public InfoCountGetMessage(Logger logger, int countGetMessage)
         {
@@ -11,11 +11,12 @@ namespace Pickpoint.MassTransitConsole.Consumer.Consume
         }
 
         public int CountGetMessage { get; }
-        internal Logger Logger { get; }
+        private Logger Logger { get; }
 
-        public async Task CountMessage(int countGetMessage)
+        public Task CountMessage(int countGetMessage)
         {
-            this.Logger.Info($"[*]Messages received {countGetMessage}.");
+            Logger.Info($"[*]Messages received {countGetMessage}.");
+            return Task.CompletedTask;
         }
     }
 }

@@ -4,14 +4,14 @@ using NLog;
 
 namespace Pickpoint.MassTransitConsole.Publisher
 {
-    internal class MassTransitConfigurator
+    sealed internal class MassTransitConfigurator
     {
         public MassTransitConfigurator(Logger logger)
         {
             this.Logger = logger;
         }
 
-        internal Logger Logger { get; }
+        private Logger Logger { get; }
 
         public async Task<IBusControl> Configure(UsingRabbitMqConfig config)
         {

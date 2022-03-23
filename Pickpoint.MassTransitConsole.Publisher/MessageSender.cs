@@ -5,8 +5,10 @@ using System.Diagnostics;
 
 namespace Pickpoint.MassTransitConsole.Publisher
 {
-    internal partial class MessageSender
+    sealed internal partial class MessageSender
     {
+        private readonly int _translationInSeconds = 1000;
+
         public MessageSender(Logger logger, IBusControl massTransitBusControl, ISendConfigurationProvider sendConfigurationProvider)
         {
             this.Logger = logger;
@@ -14,9 +16,9 @@ namespace Pickpoint.MassTransitConsole.Publisher
             this.SendConfig = sendConfigurationProvider.GetConfig();
         }
 
-        internal Logger Logger { get; }
-        internal IBusControl MassTransitBusControl { get; }
-        internal InnerSendConfig SendConfig { get; }
+        private Logger Logger { get; }
+        private IBusControl MassTransitBusControl { get; }
+        private InnerSendConfig SendConfig { get; }
 
         public const int baseMessageSizeBytes = 875;
         public async Task Send()
@@ -33,7 +35,7 @@ namespace Pickpoint.MassTransitConsole.Publisher
              await Task.Delay(SendConfig.TimeIntervalMilliseconds);
             }
             timer.Stop();
-            this.Logger.Info($"[*]Отпралено {SendConfig.MessageNumber} сообщений за {(int)(double)timer.ElapsedMilliseconds / 1000} секунд(ы). Ожидаемое время ~ {SendConfig.TimeIntervalMilliseconds} секунд.");
+            this.Logger.Info($"[*]Отпралено {SendConfig.MessageNumber} сообщений за {(int)(double)timer.ElapsedMilliseconds / _translationInSeconds} секунд(ы). Ожидаемое время ~ {SendConfig.TimeIntervalMilliseconds} секунд.");
             this.Logger.Info($"[*]Размер сообщений составляет: {SendConfig.MessageNumber * (baseMessageSizeBytes + SendConfig.Message.Text.Length) } bytes");
         }
     }

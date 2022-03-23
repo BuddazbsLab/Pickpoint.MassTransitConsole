@@ -1,15 +1,12 @@
 ﻿using Common;
 using Common.Model;
 using NLog;
-using Pickpoint.MassTransitConsole.Consumer.Consume;
+using Pickpoint.MassTransitConsole.Consumer.Listener;
 
 namespace Pickpoint.MassTransitConsole.Consumer
 {
-    internal class CreateConfigurationListenerProvaider
+    sealed internal class CreateConfigurationListenerProvaider
     {
-        private readonly int _additionalDelayTimeByAmount = 1050;
-        private readonly int _additionalDelayTimeTraffic = 36000;
-
         public CreateConfigurationListenerProvaider(Settings settings, Logger logger)
         {
           this.Settings = settings;
@@ -20,30 +17,18 @@ namespace Pickpoint.MassTransitConsole.Consumer
         public Logger Logger { get; }
 
         public async Task ConfigurationListenerProviderAsync(ConfigurationTypes configType)
-        {
-            var delayReciveMessageByAmount = (this.Settings.ConfigurationByAmount().SendIntervalSeconds * _additionalDelayTimeByAmount);
-            
-            var delayReciveMessageByTraffic = (this.Settings.ConfigurationByTraffic().SendIntervalSeconds * _additionalDelayTimeTraffic);
-            
-
+        {                                 
             switch (configType)
             {
                 case ConfigurationTypes.ByAmount:
-                    
-                    await Task.Delay(delayReciveMessageByAmount);
-                    var countGetMessageByAmount = EventConsumer.MessageCount;
-                    InfoCountGetMessage infoCountGetMessageByAmount = new(this.Logger, countGetMessageByAmount);
-                    await infoCountGetMessageByAmount.CountMessage(countGetMessageByAmount);
-                    break;
+                    ByAmountListener byAmountListener = new(Settings, Logger);
+                    await byAmountListener.ByAmount();
+                    return;
 
                 case ConfigurationTypes.ByTraffic:
-
-                    await Task.Delay(delayReciveMessageByTraffic);
-                    var countGetMessageByTraffic = EventConsumer.MessageCount;
-                    InfoCountGetMessage infoCountGetMessageByTraffic = new(this.Logger, countGetMessageByTraffic);
-                    await infoCountGetMessageByTraffic.CountMessage(countGetMessageByTraffic);
-                    break;
-
+                    ByTrafficListener byTrafficListener = new(Settings, Logger);
+                    await byTrafficListener.ByTraffic();
+                    return;
 
                 default:
                     throw new Exception("Нет подходящего слушателя!");

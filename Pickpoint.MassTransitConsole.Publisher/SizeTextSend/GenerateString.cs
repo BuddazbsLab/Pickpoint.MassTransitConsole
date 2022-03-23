@@ -2,9 +2,9 @@
 
 namespace Pickpoint.MassTransitConsole.Publisher.SizeTextSend
 {
-    internal class GenerateString
+    sealed internal class GenerateString
     {
-        public static String generateASCIIStringBySize(long trafficSize)
+        public static string generateASCIIStringBySize(long trafficSize)
         {
             StringBuilder sb = new StringBuilder();
             Random rd = new Random();

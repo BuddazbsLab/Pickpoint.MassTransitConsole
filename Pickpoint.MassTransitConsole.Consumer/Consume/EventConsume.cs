@@ -3,7 +3,7 @@ using MassTransit;
 
 namespace Pickpoint.MassTransitConsole.Consumer.Consume
 {
-    class EventConsumer : IConsumer<SendMessage>
+    sealed class EventConsumer : IConsumer<SendMessage>
     {
         public static int MessageCount
         {
