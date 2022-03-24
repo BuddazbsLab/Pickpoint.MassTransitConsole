@@ -24,7 +24,7 @@ namespace Pickpoint.MassTransitConsole.Consumer
 
             var busControl = Bus.Factory.CreateUsingRabbitMq(cfg =>
             {
-                cfg.Message<SendMessage>(x => { x.SetEntityName("Consumer"); });
+                cfg.Message<SendMessage>(x => { x.SetEntityName(config.ExchangesName); });
 
                 #region Переменные с данными подключения
                 var listener = this.Settings.ConfigurationByAmount().NumberListener;
@@ -55,13 +55,10 @@ namespace Pickpoint.MassTransitConsole.Consumer
 
             try
             {
-                await busControl.StartAsync();
-
-                #region Информативыные сообщения о работе приложения
+                await busControl.StartAsync();             
                 this.Logger.Info("[*]MassTransit configured started!");
                 this.Logger.Info("[*]The application for received messages is running (Consumer)");
                 this.Logger.Info("[*]Await Message......");
-                #endregion
 
                 return busControl;
             }

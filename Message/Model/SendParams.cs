@@ -15,4 +15,11 @@
         public int OutputTrafficSizeInMbPerSecond { get; init; }
         public int MessageTextSizeBytes { get; init; }
     }
+
+    public class BasicRMQParam
+    {
+        public int NumberMessage { get; init; }
+        public int SendIntervalSeconds { get; init; }
+        public int MessageTextSizeBytes { get; init; }
+    }
 }

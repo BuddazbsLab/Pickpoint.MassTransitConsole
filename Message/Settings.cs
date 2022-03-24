@@ -30,5 +30,10 @@ namespace Common
         {
             return ConfigureProvider.GetSection("ConfigurationType").Get<ConfigurationTypes>();
         }
+
+        public BasicRMQParam ConfigurationBasicSendRMQ()
+        {
+            return ConfigureProvider.GetSection("SendParamMessageRMQ").Get<BasicRMQParam>();
+        }
     }
 }
