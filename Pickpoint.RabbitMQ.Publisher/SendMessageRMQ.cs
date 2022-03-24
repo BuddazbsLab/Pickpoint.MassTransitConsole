@@ -22,45 +22,14 @@ namespace Pickpoint.RabbitMQ.Publisher
             using (var connection = initRabbitMQ.CreateConnection())
             using (var channel = connection.CreateModel())
             {
-                var messageText = GenerateString.generateASCIIStringBySize(paramsendRMQ.MessageTextSizeBytes);
-                var messageBodyBytes = Encoding.UTF8.GetBytes(messageText);
-
-                IBasicProperties props = channel.CreateBasicProperties();
-
-                props.DeliveryMode = 2; // режим доставки постоянный (свойтсво 2)
+                this.Logger.Info($"[*]Подождите. Идет процесс отправки сообщений.");
 
                 var timer = new Stopwatch();
                 timer.Start();
 
-                var limitMessage = paramsendRMQ.NumberMessage;
-                var basicTimeNeedSendMessage = paramsendRMQ.SendIntervalSeconds * 10; // Получаем нужный дилей для отправки сообщений за указанный промежуток времени
-                this.Logger.Info($"[*]Подождите. Идет процесс отправки сообщений.");
-                if (limitMessage > 1000)
-                {
-                    for (int i = 0; i < limitMessage; i++)
-                    {
-                        channel.BasicPublish(
-                        exchange: config.ExchangesName,
-                        routingKey: "",
-                        props,
-                        messageBodyBytes);
-
-                        await Task.Delay(basicTimeNeedSendMessage);
-                    }
-                }
-                else
-                {
-                    for (int i = 0; i < limitMessage; i++)
-                    {
-                        channel.BasicPublish(
-                        exchange: config.ExchangesName,
-                        routingKey: "",
-                        props,
-                        messageBodyBytes);
-
-                        await Task.Delay(10);
-                    }
-                }
+                CountMessage countMessage = new CountMessage();
+                await countMessage.CountAsync(paramsendRMQ, config, channel, connection);
+                
                 timer.Stop();
 
                 var messageInKb = paramsendRMQ.NumberMessage * paramsendRMQ.MessageTextSizeBytes / 1024;
