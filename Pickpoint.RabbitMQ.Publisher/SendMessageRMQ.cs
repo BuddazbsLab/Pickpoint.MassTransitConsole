@@ -53,7 +53,7 @@ namespace Pickpoint.RabbitMQ.Publisher
                     for (int i = 0; i < limitMessage; i++)
                     {
                         channel.BasicPublish(
-                        exchange: "Consumer",
+                        exchange: config.ExchangesName,
                         routingKey: "",
                         props,
                         messageBodyBytes);
