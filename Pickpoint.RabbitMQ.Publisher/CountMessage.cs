@@ -16,6 +16,9 @@ namespace Pickpoint.RabbitMQ.Publisher
             var basicTimeNeedSendMessage = paramsendRMQ.SendIntervalSeconds * 10; // Получаем нужный дилей для отправки сообщений за указанный промежуток времени
             var messageText = GenerateString.generateASCIIStringBySize(paramsendRMQ.MessageTextSizeBytes);
             var messageBodyBytes = Encoding.UTF8.GetBytes(messageText);
+            var firstDelayparam = limitMessage * 30;
+            var secondDelayparam = limitMessage * paramsendRMQ.SendIntervalSeconds;
+            var caustomTimeSendMessage = (firstDelayparam / secondDelayparam)*10;
 
             IBasicProperties props = channel.CreateBasicProperties();
 
@@ -32,7 +35,7 @@ namespace Pickpoint.RabbitMQ.Publisher
                     props,
                     messageBodyBytes);
 
-                    await Task.Delay(10);
+                    //await Task.Delay(TimeSpan.FromMilliseconds(1));
                 }
             }
             else

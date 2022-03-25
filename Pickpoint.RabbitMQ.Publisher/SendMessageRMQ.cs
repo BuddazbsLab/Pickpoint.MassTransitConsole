@@ -29,14 +29,15 @@ namespace Pickpoint.RabbitMQ.Publisher
 
                 CountMessage countMessage = new CountMessage();
                 await countMessage.CountAsync(paramsendRMQ, config, channel, connection);
-                
+                await Task.Delay(TimeSpan.FromSeconds(10));
+
                 timer.Stop();
 
                 var messageInKb = paramsendRMQ.NumberMessage * paramsendRMQ.MessageTextSizeBytes / 1024;
                 var messageInMB = messageInKb / 1024;
 
                 this.Logger.Info($"[*]Отпралено {paramsendRMQ.NumberMessage} сообщений.");
-                this.Logger.Info($"[*]Затрачено времени на отправку сообщений {timer.ElapsedMilliseconds/1000} секунд");
+                this.Logger.Info($"[*]Затрачено времени на отправку сообщений {timer.ElapsedMilliseconds / 1000} секунд");
                 this.Logger.Info($"[*]Общий размер сообщений составляет {messageInKb} Килобайт или {messageInMB} Мегабайт");
 
             }
