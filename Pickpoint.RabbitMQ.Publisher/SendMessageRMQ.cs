@@ -28,8 +28,7 @@ namespace Pickpoint.RabbitMQ.Publisher
                 timer.Start();
 
                 CountMessage countMessage = new CountMessage();
-                await countMessage.CountAsync(paramsendRMQ, config, channel, connection);
-                await Task.Delay(TimeSpan.FromSeconds(10));
+                await countMessage.CountAsync(paramsendRMQ, config, channel);
 
                 timer.Stop();
 
